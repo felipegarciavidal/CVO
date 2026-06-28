@@ -3,7 +3,7 @@ import { render as renderWeb } from "./theme.js";
 import puppeteer from "puppeteer";
 
 // Theme de JSON Resume para el PDF. Cámbialo por el que quieras.
-const PDF_THEME = "jsonresume-theme-even";
+const PDF_THEME = "jsonresume-theme-even-es";
 
 const resume = JSON.parse(readFileSync("./resume.json", "utf-8"));
 mkdirSync("./dist", { recursive: true });
@@ -24,10 +24,10 @@ const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setui
 const page = await browser.newPage();
 await page.setContent(pdfHtml, { waitUntil: "networkidle0" });
 await page.pdf({
-  path: "./dist/felipe-cv.pdf",
+  path: "./dist/Felipe_García_Vidal.pdf",
   format: "A4",
   printBackground: true,
   margin: { top: "12mm", bottom: "12mm", left: "0mm", right: "0mm" },
 });
 await browser.close();
-console.log(`✓ PDF   → dist/felipe-cv.pdf (${PDF_THEME})`);
+console.log(`✓ PDF   → dist/Felipe_García_Vidal.pdf (${PDF_THEME})`);

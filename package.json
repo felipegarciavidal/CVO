@@ -6,7 +6,7 @@
     "build": "node build.mjs"
   },
   "dependencies": {
-    "jsonresume-theme-even": "^0.26.1",
+    "jsonresume-theme-even-es": "github:felipegarciavidal/jsonresume-theme-even-es",
     "puppeteer": "^23.0.0"
   }
 }
