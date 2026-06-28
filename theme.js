@@ -411,6 +411,7 @@ ${socials(b, "")}
   const heroContent = document.getElementById('heroContent');
   const progress = document.getElementById('progress');
   const toTop = document.getElementById('toTop');
+  const footerEl = document.querySelector('footer');
 
   // Botón "volver arriba": handler en JS (evita el choque con element.scrollTop)
   toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -420,14 +421,29 @@ ${socials(b, "")}
   function onMouse(e) { mouseX = (e.clientX / window.innerWidth - 0.5); mouseY = (e.clientY / window.innerHeight - 0.5); if (!ticking) { requestAnimationFrame(update); ticking = true; } }
   function update() {
     blobs.forEach(bl => { const depth = parseFloat(bl.dataset.depth) || 0.3; const ty = scrollY * depth; const mx = mouseX * depth * 60; const my = mouseY * depth * 60; bl.style.transform = 'translate(' + mx + 'px,' + (ty + my) + 'px)'; });
-    if (heroContent) { heroContent.style.transform = 'translateY(' + (scrollY * 0.18) + 'px)'; heroContent.style.opacity = Math.max(0, 1 - scrollY / 600); }
+    // Parallax/desvanecido del hero SOLO en pantallas anchas (en estrechas la portada es alta y molesta)
+    if (heroContent) {
+      if (window.innerWidth > 820) {
+        heroContent.style.transform = 'translateY(' + (scrollY * 0.18) + 'px)';
+        heroContent.style.opacity = Math.max(0, 1 - scrollY / 600);
+      } else {
+        heroContent.style.transform = '';
+        heroContent.style.opacity = '';
+      }
+    }
     const docH = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.width = (docH > 0 ? (scrollY / docH) * 100 : 0) + '%';
     toTop.classList.toggle('show', scrollY > 480);
+    // El botón "subir" no invade el footer: se eleva justo cuando el footer entra en pantalla
+    if (footerEl) {
+      const intrude = window.innerHeight - footerEl.getBoundingClientRect().top;
+      toTop.style.bottom = (intrude > 0 ? 28 + intrude : 28) + 'px';
+    }
     ticking = false;
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('mousemove', onMouse, { passive: true });
+  window.addEventListener('resize', update);
   update();
 </script>
 
